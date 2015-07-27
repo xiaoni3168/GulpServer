@@ -17,4 +17,4 @@ app.all('*', function(req, res) {
     routerDispacher.dispacher(req, res);
 });
 
-app.listen(8088);
+app.listen(80);
