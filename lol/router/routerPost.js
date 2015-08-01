@@ -3,10 +3,19 @@ var ModalDispacher = require('../sqlite3/ModalDispacher.js'),
 
 var RouterPost = {
     recive: function(req, res) {
-        var url = req.url.toLowerCase();
+        var url = req.url.toLowerCase().split('?')[0];
         switch (url) {
             case '/unlockdb':
                 this.unlockDb(req, res);
+                break;
+            case '/getdatabaseinfo':
+                this.getDatabaseInfo(req, res);
+                break;
+            case '/createtable':
+                this.createTable(req, res);
+                break;
+            case '/droptable':
+                this.dropTable(req, res);
                 break;
             default:
                 break;
@@ -23,6 +32,56 @@ var RouterPost = {
                     res.sendStatus(400);
                 }
             }
+        }, function(err) {
+            console.log(err);
+            res.sendStatus(500);
+        });
+    },
+
+    getDatabaseInfo: function(req, res) {
+        var DatabaseBuilder = ModalDispacher.DatabaseBuilder;
+        var type = req.body.postType;
+        if(type == 1) {
+            DatabaseBuilder.showTables().then(function(result) {
+                ResponseBuilder.status(200).entity(result).end(res);
+            }, function(err) {
+                console.log(err);
+                res.sendStatus(500);
+            });
+        }
+        if(type == 2) {
+            DatabaseBuilder.showTableSchemas(req.body.tableName).then(function(result) {
+                ResponseBuilder.status(200).entity(result).end(res);
+            }, function(err) {
+                console.log(err);
+                res.sendStatus(500);
+            });
+        }
+    },
+
+    createTable: function(req, res) {
+        var DatabaseBuilder = ModalDispacher.DatabaseBuilder;
+        var tableName = req.query.tableName;
+        var params = {
+            tableName: tableName,
+            colums: req.body
+        }
+        DatabaseBuilder.createTable(params).then(function(result) {
+            ResponseBuilder.status(200).entity({msg: 'Build Success'}).end(res);
+        }, function(err) {
+            if(err.errno == 1) {
+                res.sendStatus(501);
+            }
+        });
+    },
+
+    dropTable: function(req, res) {
+        var DatabaseBuilder = ModalDispacher.DatabaseBuilder;
+        var tableName = req.query.tableName;
+        DatabaseBuilder.dropTable(tableName).then(function(result) {
+            ResponseBuilder.status(200).entity({msg: 'Drop Success'}).end(res);
+        }, function(err) {
+            
         });
     }
 }

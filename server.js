@@ -4,6 +4,7 @@ var app = express();
 
 /** Static path define*/
 app.set('LOL_ROUTE', './lol/router');
+app.set('port', process.env.PORT || 5000);
 /** End*/
 
 /** Routers*/
@@ -17,4 +18,5 @@ app.all('*', function(req, res) {
     routerDispacher.dispacher(req, res);
 });
 
-app.listen(5000);
+app.listen(app.get('port'));
+console.log('Server run at port ' + app.get('port'));

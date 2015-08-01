@@ -11,7 +11,7 @@ var RouterDispacher = {
 
         switch (method) {
             case 'get':
-                routerGet.text(req, res);
+                routerGet.recive(req, res);
                 break;
             case 'post':
                 routerPost.recive(req, res);
