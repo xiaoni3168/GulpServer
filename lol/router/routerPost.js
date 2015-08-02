@@ -17,6 +17,9 @@ var RouterPost = {
             case '/droptable':
                 this.dropTable(req, res);
                 break;
+            case '/uploadimage':
+                this.uploadImage(req, res);
+                break;
             default:
                 break;
         }
@@ -81,8 +84,14 @@ var RouterPost = {
         DatabaseBuilder.dropTable(tableName).then(function(result) {
             ResponseBuilder.status(200).entity({msg: 'Drop Success'}).end(res);
         }, function(err) {
-            
+
         });
+    },
+
+    uploadImage: function(req, res) {
+        var TableImageOrigin = ModalDispacher.TableImageOrigin;
+        var imageFile = req.body;
+        console.log(imageFile);
     }
 }
 
