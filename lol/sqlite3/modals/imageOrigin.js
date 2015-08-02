@@ -15,6 +15,20 @@ var TableImageOrigin = {
             }
         });
         return def.promise;
+    },
+
+    findAll: function() {
+        var def = Q.defer();
+        var db = DBManager.getDB();
+        var sql = 'SELECT * FROM image_origin';
+        db.all(sql, function(err, rows) {
+            if(err) {
+                def.reject(err);
+            } else {
+                def.resolve(rows);
+            }
+        });
+        return def.promise;
     }
 }
 

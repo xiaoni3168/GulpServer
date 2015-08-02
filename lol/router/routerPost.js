@@ -84,14 +84,18 @@ var RouterPost = {
         DatabaseBuilder.dropTable(tableName).then(function(result) {
             ResponseBuilder.status(200).entity({msg: 'Drop Success'}).end(res);
         }, function(err) {
-
+            res.sendStatus(500);
         });
     },
 
     uploadImage: function(req, res) {
         var TableImageOrigin = ModalDispacher.TableImageOrigin;
         var imageFile = req.body;
-        console.log(imageFile);
+        TableImageOrigin.insert(imageFile).then(function(result) {
+            ResponseBuilder.status(200).entity({msg: 'Upload Success'}).end(res);
+        }, function(err) {
+            res.sendStatus(500);
+        });
     }
 }
 
